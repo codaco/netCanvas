@@ -895,23 +895,6 @@
       ],
       "title": "Variable"
     },
-    "OptionClass": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "label": {
-          "type": "string"
-        },
-        "value": {
-          "$ref": "#/definitions/Value"
-        }
-      },
-      "required": [
-        "label",
-        "value"
-      ],
-      "title": "OptionClass"
-    },
     "Validation": {
       "type": "object",
       "additionalProperties": false,
@@ -984,16 +967,18 @@
       "title": "NodeTypeDef"
     },
     "OptionElement": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/OptionClass"
-        },
-        {
-          "type": "integer"
-        },
-        {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
           "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/Value"
         }
+      },
+      "required": [
+        "value"
       ],
       "title": "Variable Option"
     },
