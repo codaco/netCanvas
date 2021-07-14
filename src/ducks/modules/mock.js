@@ -91,8 +91,9 @@ const makeNetwork = (protocol) => {
   const edges = [];
   const networkMaxEdges = 20;
   const networkMinEdges = 1;
-  // eslint-disable-next-line no-bitwise
-  const pickNodeUid = () => nodes[~~(Math.random() * (nodes.length - 1))][entityPrimaryKeyProperty];
+  const pickNodeUid = () => nodes[
+    Math.floor(Math.random() * nodes.length)
+  ][entityPrimaryKeyProperty];
 
   codebookEdgeTypes.forEach((edgeType) => {
     const edgesOfThisType = Math.round(

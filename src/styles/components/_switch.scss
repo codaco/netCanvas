@@ -3,9 +3,15 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
+
+  &--disabled {
+    opacity: 0.5;
+    touch-action: none;
+    cursor: not-allowed;
+  }
 
   &__button {
-    cursor: pointer;
     width: $size * 2;
     height: $size;
     position: relative;

@@ -48,7 +48,7 @@
       z-index: var(--z-global-ui);
 
       img {
-        filter: drop-shadow(0 unit(1) unit(1) rgba(0, 0, 0, 0.35)); //sass-lint:disable-line no-color-literals
+        width: 100%;
       }
     }
 

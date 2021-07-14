@@ -1,0 +1,33 @@
+.export-settings-wizard {
+  .settings-element {
+    display: flex;
+    margin-bottom: 2rem;
+
+    & > .form-field-container {
+      .form-field {
+        padding: 0 2rem 0 0;
+        background: transparent;
+        width: auto;
+      }
+    }
+  }
+}
+
+.selection-status {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  margin-top: unit(2);
+
+  .selection-controls {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-content: center;
+
+    .switch {
+      margin-right: unit(4);
+    }
+  }
+}
+

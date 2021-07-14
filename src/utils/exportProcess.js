@@ -1,11 +1,11 @@
 import React from 'react';
-import uuid from 'uuid';
 import { batch } from 'react-redux';
-import { ProgressBar, Spinner, Icon } from '@codaco/ui';
+import { Icon } from '@codaco/ui';
 import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { actionCreators as exportProgressActions } from '../ducks/modules/exportProgress';
 import { withErrorDialog } from '../ducks/modules/errors';
 import ApiClient from './ApiClient';
 import FileExportManager from './network-exporters/src/FileExportManager';
@@ -14,19 +14,10 @@ import { getRemoteProtocolID } from './networkFormat';
 const { dispatch } = store;
 const { getState } = store;
 
-const showExportBeginToast = (id) => {
-  dispatch(toastActions.addToast({
-    id,
-    type: 'info',
-    title: 'Exporting interviews...',
-    CustomIcon: (<Spinner small />),
-    autoDismiss: false,
-    content: (
-      <>
-        <p>Starting export...</p>
-        <ProgressBar orientation="horizontal" percentProgress={0} />
-      </>
-    ),
+const setInitialExportStatus = () => {
+  dispatch(exportProgressActions.update({
+    statusText: 'Starting export...',
+    percentProgress: 0,
   }));
 };
 
@@ -47,7 +38,10 @@ const fatalExportErrorAction = withErrorDialog((error) => ({
   error,
 }));
 
-export const exportToFile = (sessionList) => {
+export const exportToFile = (sessionList, filename) => {
+  // Reset exportProgress state
+  dispatch(exportProgressActions.reset());
+
   const {
     installedProtocols,
     deviceSettings: {
@@ -64,6 +58,7 @@ export const exportToFile = (sessionList) => {
     exportGraphML,
     exportCSV,
     globalOptions: {
+      exportFilename: filename,
       unifyNetworks,
       useScreenLayoutCoordinates,
       screenLayoutHeight,
@@ -73,24 +68,24 @@ export const exportToFile = (sessionList) => {
 
   const errors = [];
   const succeeded = [];
-  const toastUUID = uuid();
 
   const fileExportManager = new FileExportManager(exportOptions);
 
   fileExportManager.on('begin', () => {
     // Create a toast to show the status as it updates
-    showExportBeginToast(toastUUID);
+    setInitialExportStatus();
   });
 
   fileExportManager.on('update', ({ statusText, progress }) => {
-    dispatch(toastActions.updateToast(toastUUID, {
-      content: (
-        <>
-          <p>{statusText}</p>
-          <ProgressBar orientation="horizontal" percentProgress={progress} />
-        </>
-      ),
+    dispatch(exportProgressActions.update({
+      statusText,
+      percentProgress: progress,
     }));
+  });
+
+  fileExportManager.on('cancelled', () => {
+    dispatch(exportProgressActions.reset());
+    showCancellationToast();
   });
 
   fileExportManager.on('session-exported', (sessionId) => {
@@ -103,18 +98,11 @@ export const exportToFile = (sessionList) => {
   });
 
   fileExportManager.on('error', (error) => {
-    // If this is the first error, update the toast type to 'warning'
-    if (errors.length === 0) {
-      dispatch(toastActions.updateToast(toastUUID, {
-        type: 'warning',
-      }));
-    }
-
     errors.push(error);
   });
 
   fileExportManager.on('finished', () => {
-    dispatch(toastActions.removeToast(toastUUID));
+    dispatch(exportProgressActions.reset());
 
     if (succeeded.length > 0) {
       batch(() => {
@@ -143,7 +131,7 @@ export const exportToFile = (sessionList) => {
               Your export completed, but non-fatal errors were encountered during the process. This
               may mean that not all sessions or all formats were able to be exported.
               Review the details of these errors below, and ensure that you check the data you
-              received.
+              received. Contact the Network Canvas team for support.
             </p>
             <strong>Errors:</strong>
             <ul className="export-error-list">{errorList}</ul>
@@ -175,25 +163,10 @@ export const exportToFile = (sessionList) => {
       [getRemoteProtocolID(protocol.name)]: protocol,
     }), {});
 
-  fileExportManager.exportSessions(sessionList, reformatedProtocols)
-    .then(({ run, abort }) => {
-      // Attatch the dismisshandler to the toast now that we have exportPromise defined.
-      dispatch(toastActions.updateToast(toastUUID, {
-        dismissHandler: () => {
-          showCancellationToast();
-          abort();
-        },
-      }));
-      return run();
-    }).catch((error) => {
-      // Fatal error handling
-      dispatch(toastActions.removeToast(toastUUID));
-      dispatch(fatalExportErrorAction(error));
-    });
+  return fileExportManager.exportSessions(sessionList, reformatedProtocols);
 };
 
 export const exportToServer = (sessionList) => {
-  const toastUUID = uuid();
   const errors = [];
   const succeeded = [];
 
@@ -203,17 +176,13 @@ export const exportToServer = (sessionList) => {
   client.addTrustedCert();
 
   client.on('begin', () => {
-    showExportBeginToast(toastUUID);
+    setInitialExportStatus();
   });
 
   client.on('update', ({ statusText, progress }) => {
-    dispatch(toastActions.updateToast(toastUUID, {
-      content: (
-        <>
-          <p>{statusText}</p>
-          <ProgressBar orientation="horizontal" percentProgress={progress} />
-        </>
-      ),
+    dispatch(exportProgressActions.update({
+      statusText,
+      percentProgress: progress,
     }));
   });
 
@@ -222,18 +191,11 @@ export const exportToServer = (sessionList) => {
   });
 
   client.on('error', (error) => {
-    // If this is the first error, update the toast type to 'warning'
-    if (errors.length === 0) {
-      dispatch(toastActions.updateToast(toastUUID, {
-        type: 'warning',
-      }));
-    }
-
     errors.push(error);
   });
 
   client.on('finished', () => {
-    dispatch(toastActions.removeToast(toastUUID));
+    dispatch(exportProgressActions.reset());
 
     if (succeeded.length > 0) {
       batch(() => {
@@ -286,19 +248,8 @@ export const exportToServer = (sessionList) => {
 
   const exportPromise = client.exportSessions(sessionList);
 
-  // Attatch the dismisshandler to the toast not that we have exportPromise defined.
-  dispatch(toastActions.updateToast(toastUUID, {
-    dismissHandler: () => {
-      showCancellationToast();
-      exportPromise.abort();
-    },
-  }));
-
   exportPromise.catch((error) => {
-    // Close the progress toast
-    dispatch(toastActions.removeToast(toastUUID));
     dispatch(fatalExportErrorAction(error));
-
     exportPromise.abort();
   });
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import Section from './Section';
-import NCLogo from '../../images/NC-Round.svg';
+import NCLogo from '../../images/NC-Flat@4x.png';
 import networkCanvasLogo from '../../images/NC-Mark.svg';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 import { importProtocolFromURI } from '../../utils/protocol/importProtocol';

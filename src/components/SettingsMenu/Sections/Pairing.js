@@ -7,7 +7,6 @@ import { withHandlers, compose } from 'recompose';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
-import TabItemVariants from './TabItemVariants';
 
 const Pairing = (props) => {
   const {
@@ -17,7 +16,7 @@ const Pairing = (props) => {
 
   return (
     <>
-      <motion.article variants={TabItemVariants} className="settings-element--wide">
+      <motion.article className="settings-element--wide">
         <div>
           <h2>Device Name</h2>
           <p>This is the name that your device will appear as when pairing with Server.</p>

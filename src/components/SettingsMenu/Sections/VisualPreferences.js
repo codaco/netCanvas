@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { isElectron, isCordova } from '../../../utils/Environment';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
-import TabItemVariants from './TabItemVariants';
 
 const VisualPreferences = (props) => {
   const {
@@ -42,7 +41,7 @@ const VisualPreferences = (props) => {
 
   return (
     <>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             checked: true,
@@ -58,7 +57,7 @@ const VisualPreferences = (props) => {
           </p>
         </div>
       </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
             <select
@@ -89,7 +88,7 @@ const VisualPreferences = (props) => {
         </div>
       </motion.article>
       {!isCordova() && (
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             checked: true,
@@ -107,7 +106,7 @@ const VisualPreferences = (props) => {
       </motion.article>
       )}
       {isElectron() && (
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             checked: !!startFullScreen,
@@ -136,7 +135,7 @@ const VisualPreferences = (props) => {
         </div>
       </motion.article>
       )}
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             checked: true,

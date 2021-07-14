@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
-import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
-import { Overlay } from '../Overlay';
 import formatDatestamp from '../../utils/formatDatestamp';
+import Picker from '../../components/Picker';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
@@ -45,34 +44,30 @@ const ResumeSessionPicker = ({
   });
 
   return (
-    <Overlay
+    <Picker
       show={show}
       onClose={onClose}
       title="Select an Interview to Resume"
-      fullheight
-    >
-      <NewFilterableListWrapper
-        ItemComponent={SessionCard}
-        items={formattedSessions}
-        propertyPath={null}
-        initialSortProperty="updatedAt"
-        initialSortDirection="desc"
-        sortableProperties={[
-          {
-            label: 'Last Changed',
-            variable: 'updatedAt',
-          },
-          {
-            label: 'Case ID',
-            variable: 'caseId',
-          },
-          {
-            label: 'Progress',
-            variable: 'progress',
-          },
-        ]}
-      />
-    </Overlay>
+      ItemComponent={SessionCard}
+      items={formattedSessions}
+      propertyPath={null}
+      initialSortProperty="updatedAt"
+      initialSortDirection="desc"
+      sortableProperties={[
+        {
+          label: 'Last Changed',
+          variable: 'updatedAt',
+        },
+        {
+          label: 'Case ID',
+          variable: 'caseId',
+        },
+        {
+          label: 'Progress',
+          variable: 'progress',
+        },
+      ]}
+    />
   );
 };
 

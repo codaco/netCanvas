@@ -13,6 +13,7 @@ import search from './search';
 import ui from './ui';
 import dismissedUpdates from './dismissedUpdates';
 import pairedServer from './pairedServer';
+import exportProgress from './exportProgress';
 import { actionTypes as resetActionTypes } from './reset';
 
 const appReducer = (history) => combineReducers({
@@ -29,6 +30,7 @@ const appReducer = (history) => combineReducers({
   ui,
   dismissedUpdates,
   pairedServer,
+  exportProgress,
 });
 
 const createRootReducer = (history) => (state, action) => {

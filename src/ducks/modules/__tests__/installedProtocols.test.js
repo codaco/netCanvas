@@ -3,17 +3,24 @@
 
 import { createStore, applyMiddleware } from 'redux';
 import thunks from 'redux-thunk';
-
 import reducer, { actionCreators, actionTypes } from '../installedProtocols';
 import deleteProtocol from '../../../utils/protocol/deleteProtocol';
 import { actionCreators as dialogsActions } from '../dialogs';
 
 jest.mock('../dialogs');
-jest.mock('../../../utils/protocol/deleteProtocol');
+jest.mock('../../../utils/protocol/deleteProtocol', () => jest.fn(() => Promise.resolve(true)));
 
 const testMiddleware = (actionListener) => () => (next) => (action) => {
   actionListener(action);
   return next(action);
+};
+
+const mockState = {
+  installedProtocols: {
+    abcd: {
+      name: 'Mock Protocol',
+    },
+  },
 };
 
 const getStore = (actionListener, initialState) => (
@@ -27,64 +34,38 @@ describe('protocols reducer', () => {
     ).toEqual({});
   });
 
-  describe('DELETE_PROTOCOL', () => {
-    const protocolUID = '1234';
-
-    const action = {
-      type: actionTypes.DELETE_PROTOCOL,
-      protocolUID,
-    };
-
-    const result = reducer(
-      {
-        [protocolUID]: { uid: protocolUID },
-      },
-      action,
-    );
-
-    expect(result).toEqual({});
-  });
-
-  describe('deleteProtocol()', () => {
-    const protocolUID = '1234';
-
-    beforeEach(() => {
-      dialogsActions.openDialog.mockReset();
-      deleteProtocol.mockReset();
+  describe('deleteProtocolAction()', () => {
+    afterEach(() => {
+      jest.clearAllMocks();
     });
 
-    it('confirms and then deletes protocol', (done) => {
-      const actionListener = jest.fn();
+    const protocolUID = 'abcd';
 
-      dialogsActions.openDialog.mockImplementationOnce(
-        () => () => Promise.resolve(true),
+    it('DELETE_PROTOCOL action should remove item from installedProtocols', () => {
+      const action = {
+        type: actionTypes.DELETE_PROTOCOL,
+        protocolUID,
+      };
+
+      const result = reducer(
+        {
+          [protocolUID]: { uid: protocolUID },
+        },
+        action,
       );
+
+      expect(result).toEqual({});
+    });
+
+    it('deletes protocol when there are no existing sessions', () => {
+      const actionListener = jest.fn();
 
       const store = getStore(actionListener);
       store.dispatch(actionCreators.deleteProtocol(protocolUID));
 
-      setImmediate(() => {
-        expect(actionListener.mock.calls).toMatchSnapshot();
-        expect(deleteProtocol.mock.calls.length).toBe(1);
-        done();
-      });
-    });
+      const state = store.getState();
 
-    it('does not confirm and does not delete protocol', (done) => {
-      const actionListener = jest.fn();
-
-      dialogsActions.openDialog.mockImplementationOnce(
-        () => () => Promise.resolve(false),
-      );
-
-      const store = getStore(actionListener);
-      store.dispatch(actionCreators.deleteProtocol(protocolUID));
-
-      setImmediate(() => {
-        expect(actionListener.mock.calls).toMatchSnapshot();
-        expect(deleteProtocol.mock.calls.length).toBe(0);
-        done();
-      });
+      expect(state).toMatchObject({});
     });
 
     describe('Has existing sessions', () => {
@@ -99,6 +80,7 @@ describe('protocols reducer', () => {
           sessions: [
             { protocolUID, exportedAt: Date.now() },
           ],
+          ...mockState,
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
 
@@ -120,6 +102,7 @@ describe('protocols reducer', () => {
           sessions: [
             { protocolUID, exportedAt: Date.now() },
           ],
+          ...mockState,
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
 
@@ -142,6 +125,7 @@ describe('protocols reducer', () => {
           sessions: [
             { protocolUID },
           ],
+          ...mockState,
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
 
@@ -163,6 +147,7 @@ describe('protocols reducer', () => {
           sessions: [
             { protocolUID },
           ],
+          ...mockState,
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
 

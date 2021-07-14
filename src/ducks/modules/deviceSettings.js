@@ -22,7 +22,7 @@ const initialState = {
 
   // Export Options
   exportGraphML: true,
-  exportCSV: false,
+  exportCSV: true,
   unifyNetworks: false,
   useScreenLayoutCoordinates: false,
   screenLayoutHeight: window.screen.height,

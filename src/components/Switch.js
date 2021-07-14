@@ -16,6 +16,7 @@ const Switch = ({
     'switch',
     className,
     { 'switch--on': on },
+    { 'switch--disabled': disabled },
   );
 
   return (

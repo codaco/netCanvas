@@ -5,7 +5,7 @@ const initialState = {
   crappleWarningHeeded: false,
   description: 'Unknown device',
   enableExperimentalTTS: false,
-  exportCSV: false,
+  exportCSV: true,
   exportGraphML: true,
   interfaceScale: 100,
   screenLayoutHeight: 0,

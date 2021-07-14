@@ -18,13 +18,13 @@
     align-items: center;
     align-content: space-evenly;
     justify-content: space-between;
+    margin: unit(1) 0;
 
     &-section {
 
       &--sort {
-        // display: flex;
         overflow-x: auto;
-        flex: 1 1;
+        flex: 1 1 auto;
         $opaque: rgba(0, 0, 0, 1);
         $distance: unit(2);
         -webkit-mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%); //sass-lint:disable-line no-vendor-prefixes
@@ -32,17 +32,37 @@
 
         .scroll-container {
           white-space: nowrap;
-          padding: unit(2);
         }
       }
 
       &--filter {
-        flex: 0 0 auto;
-        padding-left: unit(2);
+        flex: 1 1 auto;
+        padding: 0 unit(2);
+        display: flex;
+        max-width: 30rem;
       }
 
-      button {
-        margin: 0 unit(1);
+      .filter-button {
+        cursor: pointer;
+        display: inline-block;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--white);
+        opacity: 0.5;
+        margin: 0 unit(2);
+        padding: unit(2);
+        transition: color var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
+
+        &:hover {
+          opacity: 1;
+          color: var(--primary);
+        }
+
+        &--active {
+          opacity: 1;
+        }
       }
 
       h4 {
@@ -52,19 +72,13 @@
 
       .form-field-container {
         display: inline-block;
-        margin: 0 unit(1);
+        margin: 0;
+        flex: 1;
+        min-width: unit(25);
       }
 
       input {
         margin-bottom: 0;
-      }
-
-      &__filter {
-        width: 13rem;
-
-        input {
-          margin-bottom: 0;
-        }
       }
     }
   }
@@ -72,7 +86,7 @@
   &__main {
     @include scrollable(unit(1));
     flex: 1 1 auto;
-    padding: unit(1);
+    padding: 0 unit(1);
 
     > * {
       width: 50%;
@@ -88,6 +102,7 @@
       &::after {
         width: 100%;
         height: 100%;
+        min-height: unit(20);
         display: flex;
         justify-content: center;
         align-items: center;

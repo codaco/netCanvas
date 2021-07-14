@@ -3,8 +3,8 @@ import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from '@codaco/ui';
-import { Text } from '@codaco/ui/lib/components/Fields';
+import { Spinner } from '@codaco/ui';
+import { Search } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
@@ -24,6 +24,39 @@ export const getFilteredList = (items, filterTerm, propertyPath) => {
       );
     },
   );
+};
+
+const containerVariants = {
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.09,
+      when: 'beforeChildren',
+    },
+  },
+  hide: {
+    opacity: 0,
+    transition: {
+      when: 'afterChildren',
+    },
+  },
+};
+
+const itemVariants = {
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+    },
+  },
+  hide: {
+    opacity: 0,
+    y: 50,
+    transition: {
+      type: 'spring',
+    },
+  },
 };
 
 const NewFilterableListWrapper = (props) => {
@@ -52,7 +85,7 @@ const NewFilterableListWrapper = (props) => {
   };
 
   const handleFilterChange = (event) => {
-    const value = event.target.value || null;
+    const value = get(event, 'target.value', null);
     setFilterTerm(value);
     if (onFilterChange) { onFilterChange(value); }
   };
@@ -64,52 +97,18 @@ const NewFilterableListWrapper = (props) => {
     direction: sortAscending ? 'asc' : 'desc',
   }], {}, propertyPath)(filteredItems);
 
-  const containerVariants = {
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.09,
-        when: 'beforeChildren',
-      },
-    },
-    hide: {
-      opacity: 0,
-      transition: {
-        when: 'afterChildren',
-      },
-    },
-  };
-
-  const itemVariants = {
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-      },
-    },
-    hide: {
-      opacity: 0,
-      y: 25,
-      transition: {
-        type: 'spring',
-      },
-    },
-  };
-
   return (
-    <div
-      className="new-filterable-list"
-    >
+    <div className="new-filterable-list">
       <header className="new-filterable-list__header">
         <section className="new-filterable-list__header-section new-filterable-list__header-section--sort">
           { (sortableProperties && sortableProperties.length > 0)
             && (
             <div className="scroll-container">
-              <h4>Sort: </h4>
               {sortableProperties.map((sortField) => (
-                <Button
-                  color={sortProperty === sortField.variable ? 'primary' : 'white'}
+                <div
+                  tabIndex="0"
+                  role="button"
+                  className={`filter-button ${sortProperty === sortField.variable ? 'filter-button--active' : ''}`}
                   key={sortField.variable}
                   onClick={() => handleSetSortProperty(sortField.variable)}
                 >
@@ -119,14 +118,13 @@ const NewFilterableListWrapper = (props) => {
                   {
                     sortProperty === sortField.variable && (sortAscending ? ' \u25B2' : ' \u25BC')
                   }
-                </Button>
+                </div>
               ))}
             </div>
             )}
         </section>
         <section className="new-filterable-list__header-section new-filterable-list__header-section--filter">
-          <h4>Filter: </h4>
-          <Text
+          <Search
             type="search"
             placeholder="Filter..."
             className="new-filterable-list__filter"

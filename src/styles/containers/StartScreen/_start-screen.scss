@@ -1,11 +1,5 @@
 .start-screen {
   background-color: var(--background);
-  background-image: url('../images/main-background.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: scroll;
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 1.2rem, #000 calc(100% - 2rem), transparent 100%); //sass-lint:disable-line no-color-literals no-vendor-prefixes
-  mask-image: linear-gradient(180deg, transparent, #000 1.2rem, #000 calc(100% - 2rem), transparent 100%); //sass-lint:disable-line no-color-literals
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; //sass-lint:disable-line no-vendor-prefixes

@@ -3,20 +3,21 @@ $close-button-size: 1rem;
 .overlay {
   background: var(--color-cyber-grape);
   color: var(--text);
-  box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
+  box-shadow: 0 0 unit(8) 0 var(--modal-window-box-shadow);
   position: relative;
-  border-radius: .75rem;
-  width: 70rem;
-  max-height: calc(100vh - 4rem);
-  max-width: calc(100vw - #{unit(4)});
-  margin: unit(4);
+  border-radius: var(--border-radius);
+  max-height: calc(100vh - #{unit(8)});
+  width: calc(100vw - #{unit(8)});
+  max-width: 80rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin: unit(4);
 
   &__title {
-    padding: unit(4);
+    padding: 0 unit(4);
+    margin: unit(4);
     flex: 0 0 auto;
     display: flex;
     align-items: center;
@@ -27,7 +28,7 @@ $close-button-size: 1rem;
       margin: 0;
       flex: 1 1 auto;
       text-align: center;
-      padding-left: 2.4rem;
+      padding-left: unit(4);
     }
   }
 
@@ -38,17 +39,17 @@ $close-button-size: 1rem;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 0 2.4rem;
-
-    .new-filterable-list {
-      margin-bottom: unit(4);
-    }
+    padding: 0 unit(4);
+    margin-bottom: unit(4);
   }
 
   &__footer {
     width: 100%;
-    text-align: right;
     padding: unit(2) unit(4);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__close {
@@ -67,37 +68,18 @@ $close-button-size: 1rem;
   }
 
   &--fullscreen {
-    display: block;
     width: 100vw;
     max-width: none;
     height: 100vh;
     max-height: unset;
     border-radius: 0;
-    padding: 6rem 10rem;
     margin: 0;
 
-    .overlay__close {
-      position: absolute;
-      top: unit(4);
-      right: unit(4);
-    }
-
-    .overlay__content {
-      height: 100%;
-    }
-
-    .input__container--hidden {
-      position: absolute;
-    }
-
-    .form {
-      &__button-container {
-        display: flex;
-        justify-content: flex-end;
-
-        .toggle__container {
-          padding-left: 2em;
-        }
+    @media screen and (min-width: 90rem) {
+      .new-filterable-list__main > * {
+        width: 33.3%;
+        float: left;
+        padding: 0.6rem;
       }
     }
   }

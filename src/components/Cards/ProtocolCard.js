@@ -12,6 +12,7 @@ const ProtocolCard = (props) => {
     onClickHandler,
     openDialog,
     condensed,
+    selected,
   } = props;
 
   const {
@@ -96,6 +97,7 @@ const ProtocolCard = (props) => {
 
   return (
     <UIProtocolCard
+      selected={selected}
       schemaVersion={schemaVersion}
       lastModified={lastModified}
       installationDate={formatDatestamp(installationDate)}

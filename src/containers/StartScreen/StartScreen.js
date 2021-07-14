@@ -7,7 +7,7 @@ import InterviewSection from './InterviewSection';
 import ImportSection from './ImportSection';
 import ServerSection from './ServerSection';
 import WhatsNewSection from './WhatsNewSection';
-import DataExportSection from './DataExportSection';
+import SessionManagementSection from './SessionManagementSection';
 
 const StartScreen = ({
   activeSessionId,
@@ -41,7 +41,7 @@ const StartScreen = ({
         <HeaderSection />
         <WhatsNewSection />
         <InterviewSection />
-        <DataExportSection />
+        <SessionManagementSection />
         <ImportSection />
         <ServerSection />
       </motion.div>

@@ -30,7 +30,7 @@ const ImportSection = () => {
     <Section className="start-screen-section import-section">
       <main className="import-section__install-section">
         <header>
-          <h2>Protocols</h2>
+          <h2>Import Protocols</h2>
         </header>
         <div className="content-buttons">
           {

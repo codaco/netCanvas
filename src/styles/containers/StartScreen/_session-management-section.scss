@@ -1,0 +1,31 @@
+.session-management-section {
+  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+
+  &__main {
+    padding: unit(4) unit(6);
+
+    > .content-buttons {
+      display: flex;
+
+      .graphic-button {
+        max-width: 30rem;
+      }
+    }
+  }
+}
+
+.export-settings-wizard {
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .export-buttons {
+      .button {
+        &:last-child {
+          margin-left: unit(2);
+        }
+      }
+    }
+  }
+}

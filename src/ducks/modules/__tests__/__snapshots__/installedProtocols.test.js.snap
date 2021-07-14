@@ -1,13 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`protocols reducer deleteProtocol() Has existing sessions warns user about existing sessions 1`] = `
+exports[`protocols reducer deleteProtocolAction() Has existing sessions warns user about existing sessions 1`] = `
 Array [
   Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
         <p>
-          There are interview sessions on this device that use this protocol.
+          There are interview sessions on this device that use the protocol '
+          Mock Protocol
+          '.
         </p>
         <p>
           <strong>
@@ -15,21 +17,23 @@ Array [
           </strong>
         </p>
       </React.Fragment>,
-      "title": "Interviews using this protocol",
+      "title": "Interviews using Mock Protocol",
       "type": "Confirm",
     },
   ],
 ]
 `;
 
-exports[`protocols reducer deleteProtocol() Has non-exported existing sessions warns user about existing sessions 1`] = `
+exports[`protocols reducer deleteProtocolAction() Has non-exported existing sessions warns user about existing sessions 1`] = `
 Array [
   Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
         <p>
-          There are interview sessions on this device using this protocol that have not yet been exported.
+          There are interview sessions on this device using the protocol '
+          Mock Protocol
+          ' that have not yet been exported.
         </p>
         <p>
           <strong>
@@ -37,22 +41,9 @@ Array [
           </strong>
         </p>
       </React.Fragment>,
-      "title": "Interviews using protocol have not been exported",
+      "title": "Interviews using 'Mock Protocol' have not been exported",
       "type": "Warning",
     },
   ],
 ]
 `;
-
-exports[`protocols reducer deleteProtocol() confirms and then deletes protocol 1`] = `
-Array [
-  Array [
-    Object {
-      "protocolUID": "1234",
-      "type": "INSTALLED_PROTOCOLS/DELETE_PROTOCOL",
-    },
-  ],
-]
-`;
-
-exports[`protocols reducer deleteProtocol() does not confirm and does not delete protocol 1`] = `Array []`;
